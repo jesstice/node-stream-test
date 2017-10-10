@@ -1,9 +1,8 @@
 const { Transform } = require('stream');
-const StringDecoder = require('string_decoder').StringDecoder;
-const decoder = new StringDecoder('utf8');
 const fs = require('fs');
 const { updateElapsedTime, setOutputObject, objectToString } = require('./lib/helpers');
 
+let filename = process.argv[2];
 let totalBytes = 0;
 let totalLines = 0;
 let startTime = null;
@@ -51,8 +50,6 @@ const reportStream = new Transform({
   writableObjectMode: true,
 
   transform(chunk, encoding, callback) {
-
-    // To do: to calculate bytes/sec: totalBytes / elapsedTime * 1e9
     const data = objectToString(chunk);
     console.log(data);
 
@@ -60,9 +57,7 @@ const reportStream = new Transform({
   }
 })
 
-//reportStream.on('data', (chunk) => console.log(chunk));
-
-fs.createReadStream('public/data.txt')
+fs.createReadStream(filename)
   .pipe(initialStream)
   .pipe(reportStream)
 
