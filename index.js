@@ -22,7 +22,6 @@ const initialStream = new Transform({ //transform is also duplex stream
 
     // consume line by line of text file
     while ((index = this._rest.indexOf('\n')) !== -1) {
-      if (index < this._rest.length) index = this._rest.indexOf('\n') || this._rest.length;
       const line = this._rest.slice(0, ++index); // line being evaluated
       this._rest = this._rest.slice(index); // rest of the text file
 
@@ -66,3 +65,8 @@ const reportStream = new Transform({
 fs.createReadStream('public/data.txt')
   .pipe(initialStream)
   .pipe(reportStream)
+
+module.exports = {
+  initialStream,
+  reportStream
+}
